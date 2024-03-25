@@ -1,2 +1,0 @@
-import "./String/toCamelCase";
-export {};
