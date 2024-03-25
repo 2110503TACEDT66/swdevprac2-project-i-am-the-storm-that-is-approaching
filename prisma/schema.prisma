@@ -44,10 +44,55 @@ model Profile {
 model User {
   id            String    @id @default(cuid())
   accounts      Account[]
+  applications  Application[]
   password      String?
   name          String?
   email         String?   @unique
   profile              Profile              @relation(fields: [profileId], references: [id])
   profileId            String               @unique
+  role          String?
 }
+
+model Company {
+  id          String      @id @default(cuid())
+  name        String
+  description String?     @db.Text
+  industry    String?
+  size        Int?
+  jobListings JobListing[]
+}
+
+
+model JobListing {
+  id            String        @id @default(cuid())
+  companyId     String
+  title         String
+  description   String        @db.Text
+  requirements  String        @db.Text
+  location      String
+  type          String     
+  status        String      
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  expiresAt     DateTime
+  company       Company       @relation(fields: [companyId], references: [id])
+  applications  Application[] 
+
+  @@index([companyId])
+}
+
+
+model Application {
+  id           String   @id @default(cuid())
+  userId       String
+  jobListingId String
+  status       String   // Could be an enum: EnumApplicationStatus
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  user         User     @relation(fields: [userId], references: [id])
+  jobListing   JobListing @relation(fields: [jobListingId], references: [id])
+
+  @@index([userId, jobListingId])
+}
+
 
