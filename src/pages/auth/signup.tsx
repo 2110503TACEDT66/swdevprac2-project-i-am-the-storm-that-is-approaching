@@ -37,7 +37,6 @@ const SignUp = () => {
       toast.error("Passwords do not match.");
       return;
     }
-
     mutate(
       {
         firstName,
@@ -104,16 +103,19 @@ const SignUp = () => {
         onSubmit={handleSubmit}
       >
         <Input
+          name="firstName"
           className="sm:max-w-none"
           autoComplete="given-name"
           title="First Name"
         />
         <Input
+          name="lastName"
           className="sm:max-w-none"
           autoComplete="family-name"
           title="Last Name"
         />
         <Input
+          name="emailAddress"
           className="sm:max-w-none"
           autoComplete="email"
           title="Email Address"
@@ -123,6 +125,7 @@ const SignUp = () => {
           type="password"
           autoComplete="new-password"
           title="Password"
+          name="password"
           onChange={handlePasswordChange}
         />
         <div className="-mt-2 text-xs text-gray-700">
@@ -133,6 +136,7 @@ const SignUp = () => {
           type="password"
           autoComplete="new-password"
           title="Confirm Password"
+          name="confirmPassword"
         />
         <div>
           <button

@@ -1,10 +1,10 @@
 import { z } from "zod";
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 import bcrypt from "bcrypt";
 import { v4 as uuidv4 } from "uuid";
 
 export const userRouter = createTRPCRouter({
-  signup: protectedProcedure
+  signup: publicProcedure
     .input(
       z.object({
         firstName: z.string(),
