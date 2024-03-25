@@ -58,11 +58,13 @@ const SignIn = () => {
         className="mx-auto mt-4 flex max-w-lg flex-col justify-center gap-y-5 p-12 sm:rounded-md sm:bg-white sm:drop-shadow-lg"
       >
         <Input
+          name="emailAddress"
           className="sm:max-w-none"
           autoComplete="email"
           title="Email Address"
         />
         <Input
+          name="password"
           className="sm:max-w-none"
           type="password"
           autoComplete="current-password"
