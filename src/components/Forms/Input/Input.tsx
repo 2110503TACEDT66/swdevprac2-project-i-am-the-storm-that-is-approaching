@@ -38,18 +38,18 @@ export const Input = ({
       )}
       <div
         className={twMerge(
-          "flex w-full cursor-text overflow-hidden rounded-md border border-gray-300 bg-white shadow-sm focus-within:border-green-600 focus-within:ring-1 focus-within:ring-green-600 focus:outline-none",
+          "flex w-full cursor-text overflow-hidden rounded-md border border-gray-300 bg-white shadow-sm focus-within:border-indigo-600 focus-within:ring-1 focus-within:ring-indigo-600 focus:outline-none",
           submitted &&
             inputRef.current?.value === "" &&
             "[&:not(:focus-within)]:border-red-600",
-          parentClassName
+          parentClassName,
         )}
       >
         <input
           ref={inputRef}
           className={twMerge(
             `w-full border-0 p-0 py-2 pl-3 pr-1.5 placeholder:text-gray-400 focus:outline-none focus:ring-0 sm:text-sm`,
-            className
+            className,
           )}
           name={title}
           type={type}

@@ -22,15 +22,15 @@ export const Checkbox = ({
     <label
       className={twMerge(
         "flex w-fit cursor-pointer select-none items-center gap-x-3 py-1",
-        parentClassName
+        parentClassName,
       )}
     >
       <input
         className={twMerge(
           `${
             description ? "mb-4" : ""
-          } focus:ring-1.5 h-4 w-4 rounded border-gray-300 text-green-600 accent-green-600 focus:ring-green-600 sm:mt-0`,
-          className
+          } focus:ring-1.5 h-4 w-4 rounded border-gray-300 text-indigo-600 accent-indigo-600 focus:ring-indigo-600 sm:mt-0`,
+          className,
         )}
         name="notification"
         type="checkbox"
