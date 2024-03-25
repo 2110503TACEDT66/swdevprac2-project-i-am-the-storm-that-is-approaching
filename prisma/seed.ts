@@ -87,8 +87,6 @@ async function main() {
         },
       ],
     },
-    // Add additional companies here
-    // Template for additional company:
     {
       name: "Global FinTech Innovators",
       description:
@@ -96,17 +94,23 @@ async function main() {
       industry: "Financial Services",
       size: 1000,
       jobListings: [
-        // Add job listings similar to above
       ],
     },
-    // Template continued for companies 4, 5, and 6
   ];
 
-  for (const company of companyData) {
+ for (const company of companyData) {
     await prisma.company.create({
-      data: company,
+        data: {
+            name: company.name,
+            description: company.description,
+            industry: company.industry,
+            size: company.size,
+            jobListings: {
+                create: company.jobListings,
+            },
+        },
     });
-  }
+}
 
   console.log("Seeding finished.");
 }
