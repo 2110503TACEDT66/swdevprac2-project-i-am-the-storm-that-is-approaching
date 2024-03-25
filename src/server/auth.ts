@@ -5,13 +5,14 @@ import {
   type DefaultSession,
   type NextAuthOptions,
 } from "next-auth";
-import { type Adapter } from "next-auth/adapters";
-import { AppProviders } from "next-auth/providers";
 import CredentialsProvider from "next-auth/providers/credentials";
 import DiscordProvider from "next-auth/providers/discord";
 
+import bcrypt from "bcrypt";
+
 import { env } from "~/env";
 import { db } from "~/server/db";
+import { type AppProviders } from "next-auth/providers/index";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -82,9 +83,6 @@ providers.push(
       if (!passwordMatches) {
         throw new Error("Incorrect password. Please try again.");
       }
-
-      await log("login", `User ${user.id} logged in`);
-
       return user;
     },
   }),
