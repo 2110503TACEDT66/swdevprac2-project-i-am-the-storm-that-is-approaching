@@ -43,7 +43,6 @@ export default function Page({
         <main className={twMerge("h-full", className)} {...props}>
           {children}
         </main>
-        {/* <CookieAlert /> */}
       </div>
       <footer>
         <Footer />
