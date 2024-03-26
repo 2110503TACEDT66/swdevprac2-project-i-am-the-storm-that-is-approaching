@@ -39,6 +39,7 @@ model Profile {
     lastName       String?
     headline       String?
     bio            String?
+    telephone      String?
     user           User?
 }
 model User {
@@ -58,6 +59,9 @@ model Company {
   name        String
   description String?     @db.Text
   industry    String?
+  address     String?
+  website     String?
+  telephone   String?
   size        Int?
   jobListings JobListing[]
 }
