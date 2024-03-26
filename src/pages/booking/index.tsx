@@ -87,8 +87,8 @@ export default function Bookings() {
   return (
     <div className="bg-gray-50">
       <Page>
-        <div className="mx-5 max-w-screen-xl text-2xl 2xl:mx-auto">
-          <div className="mx-auto mt-10 w-screen max-w-7xl">
+        <div className="mx-5 max-w-screen-xl text-2xl xl:mx-auto">
+          <div className="mx-auto mt-10">
             <div className="overflow-hidden bg-white shadow sm:rounded-lg">
               <div className="broder-gray-50 border-b px-4 py-6 sm:px-6">
                 <h3 className="text-xl font-semibold leading-7 text-gray-900">

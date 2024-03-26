@@ -27,7 +27,7 @@ export const userRouter = createTRPCRouter({
               firstName: input.firstName,
               lastName: input.lastName,
               headline: "Dreamer",
-              telephone: input.telephone
+              telephone: input.telephone,
             },
           },
           email: input.email,
@@ -49,6 +49,15 @@ export const userRouter = createTRPCRouter({
         },
         select: {
           id: true,
+          profile: {
+            select: {
+              id: true,
+              firstName: true,
+              lastName: true,
+              telephone: true,
+              headline:true,
+            },
+          },
           accounts: {
             select: {
               id: true,
@@ -64,12 +73,6 @@ export const userRouter = createTRPCRouter({
           password: true,
           name: true,
           email: true,
-          profile: {
-            select: {
-              id: true,
-              bio: true,
-            },
-          },
           profileId: true,
           role: true,
         },
