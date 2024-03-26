@@ -5,6 +5,7 @@ import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { toast } from "sonner";
 import Avvvatars from "avvvatars-react";
+import { api } from "~/utils/api";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -12,6 +13,8 @@ function classNames(...classes: string[]) {
 
 export default function Navbar() {
   const { data: session } = useSession();
+  const sessionId = useSession().data?.user.id ?? "NO_OP";
+  const { data } = api.user.getUserById.useQuery(sessionId);
 
   function signOutUser() {
     signOut()
@@ -92,9 +95,15 @@ export default function Navbar() {
                 ) : (
                   <Menu as="div" className="relative ml-3">
                     <div>
-                      <Menu.Button className="relative flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                      <Menu.Button
+                        className="relative flex items-center rounded-full bg-white text-sm
+                       focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                      >
                         <span className="absolute -inset-1.5" />
                         <span className="sr-only">Open user menu</span>
+                        <div className="text-md flex justify-center pr-5 font-semibold">
+                          {data?.name}
+                        </div>
                         <Avvvatars
                           value={"Apiphoom" || "Anonymous"}
                           size={50}

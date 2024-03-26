@@ -19,7 +19,6 @@ export default function Bookings() {
   const [applicationId, setapplicationId] = useState("");
   const {
     mutate: deleteApplication,
-    isLoading,
     isSuccess,
     isError,
   } = api.application.deleteApplication.useMutation();
