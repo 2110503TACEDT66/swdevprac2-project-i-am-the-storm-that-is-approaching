@@ -40,7 +40,7 @@ export default function Home() {
         </div>
         <div className="mt-20 rounded-xl bg-gray-50 p-10">
           <div className="mx-auto max-w-2xl lg:mx-0">
-            <h2 className="text-2xl font-bold tracking-tight text-gray-900">
+            <h2 className="text-2xl font-semibold tracking-tight text-gray-900">
               Unlock Your Career Potential
             </h2>
             <p className="mt-6 text-lg leading-8 text-gray-600">
