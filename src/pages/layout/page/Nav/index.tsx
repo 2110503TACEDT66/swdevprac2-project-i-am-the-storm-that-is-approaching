@@ -63,7 +63,7 @@ export default function Navbar() {
                     href="#"
                     className="inline-flex items-center border-b-2 border-indigo-500 px-1 pt-1 text-sm font-medium text-gray-900"
                   >
-                    Dashboard
+                    Home
                   </a>
                   <a
                     href="#"
@@ -153,7 +153,7 @@ export default function Navbar() {
                 href="#"
                 className="block border-l-4 border-indigo-500 bg-indigo-50 py-2 pl-3 pr-4 text-base font-medium text-indigo-700"
               >
-                Dashboard
+                Home
               </Disclosure.Button>
               <Disclosure.Button
                 as="a"
