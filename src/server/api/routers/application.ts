@@ -2,7 +2,6 @@ import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const applicationRouter = createTRPCRouter({
-  // Create a new application
   createApplication: protectedProcedure
     .input(
       z.object({
@@ -27,7 +26,7 @@ export const applicationRouter = createTRPCRouter({
     .input(
       z.object({
         applicationId: z.string(),
-        newReservedAt: z.string(), // Assuming you want to update this field
+        newReservedAt: z.string(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -43,15 +42,14 @@ export const applicationRouter = createTRPCRouter({
       return updatedApplication;
     }),
 
-  // Get applications for a specific job listing
   getApplicationsForJobListing: protectedProcedure
     .input(z.string())
     .query(async ({ ctx, input }) => {
       const applications = await ctx.db.application.findMany({
         where: { jobListingId: input },
         include: {
-          user: true, // Assuming you want to include some user details
-          jobListing: true, // And details about the job listing
+          user: true,
+          jobListing: true,
         },
       });
 
@@ -62,14 +60,13 @@ export const applicationRouter = createTRPCRouter({
       return applications;
     }),
 
-  // Get applications for a specific user
   getApplicationsForUser: protectedProcedure
     .input(z.string())
     .query(async ({ ctx, input }) => {
       const applications = await ctx.db.application.findMany({
         where: { userId: input },
         include: {
-          jobListing: true, // Including job listing details might be useful here
+          jobListing: true,
         },
       });
 

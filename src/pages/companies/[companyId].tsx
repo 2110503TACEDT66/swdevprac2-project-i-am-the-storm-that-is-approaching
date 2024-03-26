@@ -6,18 +6,37 @@ import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, type SetStateAction, useState } from "react";
 import { toast } from "sonner";
 import { useSession } from "next-auth/react";
+import Avvvatars from "avvvatars-react";
 
 export default function CompanyDetail() {
+  interface JobListing {
+    id: string;
+    companyId: string;
+    title: string;
+    description: string;
+    requirements: string;
+    location: string;
+    type: string;
+    createdAt: Date;
+    updatedAt: Date;
+    expiresAt: Date;
+  }
+
+  interface Application {
+    jobListing: JobListing;
+  }
+
   const router = useRouter();
   const { companyId } = router.query;
-  const [open, setOpen] = useState(false);
   const { data, isLoading } = api.company.getCompanyById.useQuery(
     companyId as string,
   );
+  const sessionId = useSession().data?.user.id ?? "NO_OP";
+  const { data: applications, refetch } =
+    api.application.getApplicationsForUser.useQuery(sessionId);
+  const [open, setOpen] = useState(false);
   const [jobId, setJobId] = useState("");
   const { mutate } = api.application.createApplication.useMutation();
-  const { data: session } = useSession();
-
   const handleClickInterview = (jobId: SetStateAction<string>) => () => {
     setJobId(jobId);
     setOpen(true);
@@ -33,22 +52,42 @@ export default function CompanyDetail() {
       return;
     }
 
-    if (!session?.user?.id) {
+    if (!sessionId) {
       toast.error("You must be logged in to schedule an interview.");
       return;
     }
+
+    const applicationsData: Application[] = applications ?? [];
+
+    if (applicationsData) {
+      const hasAppliedForThisJob = applicationsData.some(
+        (app) => app.jobListing.id === jobId,
+      );
+      if (hasAppliedForThisJob) {
+        toast.error(
+          "You have already scheduled an interview for this job. If you wish to reschedule, please go to your bookings and reschedule it.",
+        );
+        return;
+      }
+    }
+
+    if (applicationsData.length >= 3) {
+      toast.error(
+        "You cannot schedule more than 3 interviews. Please cancel a previous interview in your bookings if you wish to schedule a new one.",
+      );
+      return;
+    }
+
     mutate(
       {
-        userId: session.user.id,
+        userId: sessionId,
         jobListingId: jobId,
         reservedAt: meetingTimeInput.value,
       },
       {
         onSuccess: () => {
           setOpen(false);
-          toast.success(
-            "Your interview has been successfully scheduled. You can view the details of your interview in the booking tab.",
-          );
+          window.parent.location = window.parent.location.href;
         },
         onError: () => {
           toast.error("Failed to schedule the interview. Please try again.");
@@ -63,13 +102,21 @@ export default function CompanyDetail() {
         {!isLoading && data ? (
           <div className="mx-auto w-screen max-w-7xl">
             <div className="overflow-hidden bg-white shadow sm:rounded-lg">
-              <div className="px-4 py-6 sm:px-6">
-                <h3 className="text-xl font-semibold leading-7 text-gray-900">
-                  {data?.name}
-                </h3>
-                <p className="mt-1 max-w-2xl text-sm leading-6 text-gray-500">
-                  {data?.description}
-                </p>
+              <div className="flex flex-col px-4  py-6 sm:px-6 md:flex-row">
+                <Avvvatars
+                  value={data?.name || "Anonymous"}
+                  size={80}
+                  border={true}
+                  radius={100}
+                />
+                <div className="pt-5 md:pl-5 md:pt-3">
+                  <h3 className="text-xl font-semibold leading-7 text-gray-900">
+                    {data?.name}
+                  </h3>
+                  <p className="mt-1 max-w-2xl text-sm leading-6 text-gray-500">
+                    {data?.description}
+                  </p>
+                </div>
               </div>
               <div className="border-t border-gray-100">
                 <dl className="divide-y divide-gray-100">
