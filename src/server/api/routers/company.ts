@@ -47,6 +47,9 @@ export const companyRouter = createTRPCRouter({
           description: true,
           industry: true,
           size: true,
+          address: true,
+          website: true,
+          telephone: true,
           jobListings: {
             select: {
               id: true,
