@@ -171,13 +171,22 @@ export default function CompanyDetail() {
                       </p>
                     </div>
                   </div>
+                  <div className="flex items-center justify-center pt-5">
+                    <input
+                      type="datetime-local"
+                      id="meeting-time"
+                      name="meeting-time"
+                      min="2022-05-10T00:00"
+                      max="2022-05-13T23:59"
+                    />
+                  </div>
+
                   <div className="mt-5 sm:mt-6">
-                    {/* Embed or link to your calendar booking tool here */}
                     <a
                       href="#"
                       className="inline-flex w-full justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                     >
-                      Open Calendar
+                      Confirm Schedule Interview
                     </a>
                   </div>
                 </Dialog.Panel>

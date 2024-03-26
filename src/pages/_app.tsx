@@ -7,10 +7,7 @@ import { api } from "~/utils/api";
 
 import "~/styles/globals.css";
 
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-sans",
-});
+const inter = Inter({ variable: "--font-inter", subsets: ["latin"] });
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
@@ -18,7 +15,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
 }) => {
   return (
     <SessionProvider session={session}>
-      <main className={`font-sans ${inter.variable}`}>
+      <main className={`font-inter ${inter.variable}`}>
         <Component {...pageProps} />
         <Toaster closeButton position="top-right" />
       </main>
