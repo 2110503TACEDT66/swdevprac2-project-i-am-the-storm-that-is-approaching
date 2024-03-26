@@ -7,10 +7,20 @@ import { PasswordCheckService } from "~/utils/global/Password/passwordStrength";
 import { Input } from "~/components/Forms/Input/Input";
 import Page from "../layout/page";
 import { api } from "~/utils/api";
+import { useEffect } from "react";
+import { useSession } from "next-auth/react";
 
 const SignUp = () => {
-  const { mutate } = api.user.signup.useMutation();
+  const { data: session } = useSession();
   const router = useRouter();
+
+  useEffect(() => {
+    if (session) {
+      void router.push("/");
+    }
+  }, [session, router]);
+
+  const { mutate } = api.user.signup.useMutation();
   const [passwordStrengthMessage, setPasswordStrengthMessage] = useState("");
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
