@@ -6,7 +6,6 @@ import {
   type NextAuthOptions,
 } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import DiscordProvider from "next-auth/providers/discord";
 
 import bcrypt from "bcrypt";
 
@@ -45,10 +44,6 @@ declare module "next-auth" {
 const providers: AppProviders = [];
 
 providers.push(
-  DiscordProvider({
-    clientId: env.DISCORD_CLIENT_ID,
-    clientSecret: env.DISCORD_CLIENT_SECRET,
-  }),
   CredentialsProvider({
     id: "credentials",
     name: "Credentials",
