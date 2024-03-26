@@ -1,3 +1,4 @@
+import { z } from "zod";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
 export const companyRouter = createTRPCRouter({
@@ -32,4 +33,41 @@ export const companyRouter = createTRPCRouter({
 
     return companies;
   }),
+
+  getCompanyById: protectedProcedure
+    .input(z.string())
+    .query(async ({ ctx, input }) => {
+      const company = await ctx.db.company.findUnique({
+        where: {
+          id: input,
+        },
+        select: {
+          id: true,
+          name: true,
+          description: true,
+          industry: true,
+          size: true,
+          jobListings: {
+            select: {
+              id: true,
+              title: true,
+              description: true,
+              requirements: true,
+              location: true,
+              type: true,
+              status: true,
+              createdAt: true,
+              updatedAt: true,
+              expiresAt: true,
+            },
+          },
+        },
+      });
+
+      if (!company) {
+        throw new Error(`Company with ID ${input} not found`);
+      }
+
+      return company;
+    }),
 });

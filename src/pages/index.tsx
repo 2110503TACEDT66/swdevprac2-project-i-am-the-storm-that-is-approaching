@@ -30,12 +30,9 @@ export default function Home() {
                     }
                   />
                 ))
-              : Array.from({ length: 6 }).map(
-                  (
-                    _,
-                    index, // Create 6 skeleton cards
-                  ) => <CompanyCardSkeleton key={index} />,
-                )}
+              : Array.from({ length: 6 }).map((_, index) => (
+                  <CompanyCardSkeleton key={index} />
+                ))}
           </ul>
         </div>
         <div className="mt-20 rounded-xl bg-gray-50 p-10">
