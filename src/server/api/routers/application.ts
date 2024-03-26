@@ -67,11 +67,10 @@ export const applicationRouter = createTRPCRouter({
         where: { userId: input },
         select: {
           id: true,
-          userId: true, 
+          userId: true,
           jobListingId: true,
           jobListing: true,
-          reservedAt: true, 
-
+          reservedAt: true,
         },
       });
 
@@ -99,4 +98,39 @@ export const applicationRouter = createTRPCRouter({
 
       return { success: true, message: "Application deleted successfully." };
     }),
+  editApplication: protectedProcedure
+    .input(
+      z.object({
+        applicationId: z.string(),
+        userId: z.string().optional(),
+        jobListingId: z.string().optional(), 
+        reservedAt: z.string().optional(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const updatedApplication = await ctx.db.application.update({
+        where: { id: input.applicationId },
+        data: {
+          ...(input.userId && { userId: input.userId }),
+          ...(input.jobListingId && { jobListingId: input.jobListingId }),
+          ...(input.reservedAt && { reservedAt: input.reservedAt }),
+        },
+      });
+
+      if (!updatedApplication) {
+        throw new Error(`Application with ID ${input.applicationId} not found`);
+      }
+
+      return updatedApplication;
+    }),
+  getAllApplications: protectedProcedure.query(async ({ ctx }) => {
+    const applications = await ctx.db.application.findMany({
+      include: {
+        user: true,
+        jobListing: true,
+      },
+    });
+
+    return applications;
+  }),
 });
