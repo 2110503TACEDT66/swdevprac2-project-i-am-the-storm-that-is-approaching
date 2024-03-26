@@ -3,7 +3,7 @@ import Page from "../layout/page";
 import { api } from "~/utils/api";
 import CompanyDetailSkeleton from "~/components/Card/CompanyDetailCard/CompanyDetailSkeleton";
 import { Dialog, Transition } from "@headlessui/react";
-import { Fragment, type SetStateAction, useState, useEffect } from "react";
+import { Fragment, type SetStateAction, useState } from "react";
 import { toast } from "sonner";
 import { useSession } from "next-auth/react";
 import Avvvatars from "avvvatars-react";
@@ -43,12 +43,6 @@ export default function CompanyDetail() {
     setJobId(jobId);
     setOpen(true);
   };
-  const { data: session } = useSession();
-  useEffect(() => {
-    if (!session) {
-      void router.push("/auth/signin");
-    }
-  }, [session, router]);
 
   const handleConfirmInterview = () => {
     const meetingTimeInput = document.getElementById(

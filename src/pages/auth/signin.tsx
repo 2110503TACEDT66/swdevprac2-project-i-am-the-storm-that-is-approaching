@@ -4,19 +4,9 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
 import Page from "../layout/page";
 import { Input } from "~/components/Forms";
-import { useEffect } from "react";
-import { useSession } from "next-auth/react";
 
 const SignIn = () => {
-  const { data: session } = useSession();
   const router = useRouter();
-
-  useEffect(() => {
-    if (session) {
-      void router.push("/");
-    }
-  }, [session, router]);
-
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);

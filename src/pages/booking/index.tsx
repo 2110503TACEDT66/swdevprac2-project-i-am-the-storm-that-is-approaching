@@ -2,12 +2,11 @@ import { api } from "~/utils/api";
 import Page from "../layout/page";
 import { useSession } from "next-auth/react";
 import { type Application } from "../companies/[companyId]";
-import { Fragment, type SetStateAction, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
+import { Fragment, SetStateAction, useRef, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import { toast } from "sonner";
-import { useEffect } from "react";
+
 export default function Bookings() {
   const sessionId = useSession().data?.user.id ?? "NO_OP";
   const { data: applications } =
@@ -84,14 +83,6 @@ export default function Bookings() {
       },
     );
   };
-
-  const { data: session } = useSession();
-  const router = useRouter();
-  useEffect(() => {
-    if (!session) {
-      void router.push("/auth/signin");
-    }
-  }, [session, router]);
 
   return (
     <div className="bg-gray-50">
