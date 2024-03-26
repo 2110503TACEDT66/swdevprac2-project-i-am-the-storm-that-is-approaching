@@ -8,24 +8,24 @@ import { toast } from "sonner";
 import { useSession } from "next-auth/react";
 import Avvvatars from "avvvatars-react";
 
+export interface JobListing {
+  id: string;
+  companyId: string;
+  title: string;
+  description: string;
+  requirements: string;
+  location: string;
+  type: string;
+  createdAt: Date;
+  updatedAt: Date;
+  expiresAt: Date;
+}
+
+export interface Application {
+  jobListing: JobListing;
+}
+
 export default function CompanyDetail() {
-  interface JobListing {
-    id: string;
-    companyId: string;
-    title: string;
-    description: string;
-    requirements: string;
-    location: string;
-    type: string;
-    createdAt: Date;
-    updatedAt: Date;
-    expiresAt: Date;
-  }
-
-  interface Application {
-    jobListing: JobListing;
-  }
-
   const router = useRouter();
   const { companyId } = router.query;
   const { data, isLoading } = api.company.getCompanyById.useQuery(
