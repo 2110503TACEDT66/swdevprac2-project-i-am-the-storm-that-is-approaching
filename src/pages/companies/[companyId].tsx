@@ -2,14 +2,30 @@ import { useRouter } from "next/router";
 import Page from "../layout/page";
 import { api } from "~/utils/api";
 import CompanyDetailSkeleton from "~/components/Card/CompanyDetailCard/CompanyDetailSkeleton";
+import { Dialog, Transition } from "@headlessui/react";
+import { Fragment, useState } from "react";
+import { DayPicker } from "react-day-picker";
+import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
+import {
+  Input,
+  Popover,
+  PopoverHandler,
+  PopoverContent,
+} from "@material-tailwind/react";
+import { format } from "date-fns";
 
 export default function CompanyDetail() {
   const router = useRouter();
   const { companyId } = router.query;
-
+  const [open, setOpen] = useState(false);
   const { data, isLoading } = api.company.getCompanyById.useQuery(
     companyId as string,
   );
+  const [date, setDate] = useState<Date>();
+
+  const handleClickInterview = () => {
+    setOpen(true);
+  };
 
   return (
     <div className="bg-gray-50">
@@ -106,6 +122,7 @@ export default function CompanyDetail() {
                   <button
                     className="mt-5 rounded-lg bg-indigo-500 p-1 px-6
                    font-semibold text-white hover:bg-indigo-600"
+                    onClick={handleClickInterview}
                   >
                     Schedule Interview
                   </button>
@@ -115,6 +132,60 @@ export default function CompanyDetail() {
           </div>
         </div>
       </Page>
+      <Transition.Root show={open} as={Fragment}>
+        <Dialog as="div" className="relative z-10" onClose={setOpen}>
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+          </Transition.Child>
+          <div className="fixed inset-0 z-10 overflow-y-auto">
+            <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                enterTo="opacity-100 translate-y-0 sm:scale-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100 translate-y-0 sm:scale-100"
+                leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+              >
+                <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
+                  <div className="text-center">
+                    <h3
+                      className="text-lg font-medium leading-6 text-gray-900"
+                      id="modal-title"
+                    >
+                      Schedule Your Interview
+                    </h3>
+                    <div className="mt-2">
+                      <p className="text-sm text-gray-500">
+                        Please pick a suitable date and time for your job
+                        interview from the calendar below.
+                      </p>
+                    </div>
+                  </div>
+                  <div className="mt-5 sm:mt-6">
+                    {/* Embed or link to your calendar booking tool here */}
+                    <a
+                      href="#"
+                      className="inline-flex w-full justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                    >
+                      Open Calendar
+                    </a>
+                  </div>
+                </Dialog.Panel>
+              </Transition.Child>
+            </div>
+          </div>
+        </Dialog>
+      </Transition.Root>
     </div>
   );
 }

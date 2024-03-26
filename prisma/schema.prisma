@@ -90,9 +90,10 @@ model Application {
   id           String   @id @default(cuid())
   userId       String
   jobListingId String
-  status       String   // Could be an enum: EnumApplicationStatus
+  status       String  
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
+  reservedAt   DateTime?
   user         User     @relation(fields: [userId], references: [id])
   jobListing   JobListing @relation(fields: [jobListingId], references: [id])
 
