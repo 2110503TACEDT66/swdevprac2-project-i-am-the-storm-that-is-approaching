@@ -53,7 +53,7 @@ const SignUp = () => {
             redirect: false,
           })
             .then((res) => {
-              if (res && res.ok) {
+              if (res?.ok) {
                 router.push("/");
                 toast.success("Welcome! You've successfully signed in.");
               } else {

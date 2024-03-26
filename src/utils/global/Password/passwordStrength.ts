@@ -7,9 +7,7 @@ export const enum PasswordCheckStrength {
 }
 
 export class PasswordCheckService {
-  public static get MinimumLength(): number {
-    return 5;
-  }
+  public static readonly MinimumLength = 5;
 
   // Regex to check for a common password string - all based on 5+ length passwords
   private static commonPasswordPatterns =
