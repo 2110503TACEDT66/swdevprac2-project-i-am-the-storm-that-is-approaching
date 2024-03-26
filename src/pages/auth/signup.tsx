@@ -19,10 +19,18 @@ const SignUp = () => {
     const firstName = formData.get("firstName") as string;
     const lastName = formData.get("lastName") as string;
     const email = formData.get("emailAddress") as string;
+    const telephone = formData.get("phone") as string;
     const password = formData.get("password") as string;
     const confirmPassword = formData.get("confirmPassword") as string;
 
-    if (!firstName || !lastName || !email || !password || !confirmPassword) {
+    if (
+      !firstName ||
+      !lastName ||
+      !email ||
+      !password ||
+      !confirmPassword ||
+      !telephone
+    ) {
       toast.error("Please fill out all fields.");
       return;
     }
@@ -30,6 +38,13 @@ const SignUp = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       toast.error("Please enter a valid email address.");
+      return;
+    }
+
+    const phoneRegex =
+      /^(\+\d{1,2}\s?)?(\(\d{3}\)|\d{3})[\s.-]?\d{3}[\s.-]?\d{4}$/;
+    if (!phoneRegex.test(telephone)) {
+      toast.error("Please enter a valid telephone number.");
       return;
     }
 
@@ -43,6 +58,7 @@ const SignUp = () => {
         lastName,
         email,
         password,
+        telephone,
       },
       {
         onSuccess: () => {
@@ -119,6 +135,12 @@ const SignUp = () => {
           className="sm:max-w-none"
           autoComplete="email"
           title="Email Address"
+        />
+        <Input
+          name="phone"
+          className="sm:max-w-none"
+          autoComplete="tel"
+          title="Telephone"
         />
         <Input
           className="sm:max-w-none"
