@@ -11,8 +11,12 @@ export default function Bookings() {
   const sessionId = useSession().data?.user.id ?? "NO_OP";
   const { data: applications } =
     api.application.getApplicationsForUser.useQuery(sessionId);
+  const { data: adminapplications } =
+    api.application.getAllApplications.useQuery();
+  const { data } = api.user.getUserById.useQuery(sessionId);
   const { mutate } = api.application.updateApplicationReservedAt.useMutation();
   const applicationsData: Application[] = applications ?? [];
+  const applicationsDataAdmin: Application[] = adminapplications ?? [];
   const [open, setOpen] = useState(false);
   const [openedit, setOpenedit] = useState(false);
   const cancelButtonRef = useRef(null);
@@ -96,44 +100,85 @@ export default function Bookings() {
                   interview!
                 </p>
               </div>
-              <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 p-10 pt-8 lg:mx-0 lg:max-w-none lg:grid-cols-3">
-                {applicationsData?.map((job) => (
-                  <article
-                    key={job.id}
-                    className="flex max-w-xl flex-col items-start justify-between"
-                  >
-                    <div className="flex items-center gap-x-4 rounded-full bg-gray-100 p-1 px-3 text-xs">
-                      {job.jobListing.type}
-                    </div>
-                    <div className="group relative">
-                      <h3 className="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600">
-                        <span className="absolute inset-0" />
-                        {job.jobListing.title}
-                      </h3>
-                      <p className="mt-5 line-clamp-3 text-sm leading-6 text-gray-600">
-                        {job.jobListing.description}
-                      </p>
-                      <p className="mt-5 line-clamp-3 text-sm leading-6 text-gray-600">
-                        {job.reservedAt}
-                      </p>
-                    </div>
-                    <div className="text-sm">
-                      <button
-                        className="mt-5 rounded-md bg-gray-200 p-1 px-6 font-semibold text-black hover:bg-gray-300"
-                        onClick={handleClickEdit(job.id)}
-                      >
-                        Edit
-                      </button>
-                      <button
-                        className="ml-2 mt-5 rounded-md bg-red-600 p-1 px-6 font-semibold text-white hover:bg-red-700"
-                        onClick={handleClickDelete(job.id)}
-                      >
-                        Delete
-                      </button>
-                    </div>
-                  </article>
-                ))}
-              </div>
+              {data?.role === "admin" ? (
+                <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 p-10 pt-8 lg:mx-0 lg:max-w-none lg:grid-cols-3">
+                  {applicationsDataAdmin?.map((job) => (
+                    <article
+                      key={job.id}
+                      className="flex max-w-xl flex-col items-start justify-between"
+                    >
+                      <div className="flex items-center gap-x-4 rounded-full bg-gray-100 p-1 px-3 text-xs">
+                        {job.jobListing.type}
+                      </div>
+                      <div className="group relative">
+                        <h3 className="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600">
+                          <span className="absolute inset-0" />
+                          {job.jobListing.title}
+                        </h3>
+                        <p className="mt-5 line-clamp-3 text-sm leading-6 text-gray-600">
+                          {job.jobListing.description}
+                        </p>
+                        <p className="mt-5 line-clamp-3 text-sm leading-6 text-gray-600">
+                          {job.reservedAt}
+                        </p>
+                      </div>
+                      <div className="text-sm">
+                        <button
+                          className="mt-5 rounded-md bg-gray-200 p-1 px-6 font-semibold text-black hover:bg-gray-300"
+                          onClick={handleClickEdit(job.id)}
+                        >
+                          Edit
+                        </button>
+                        <button
+                          className="ml-2 mt-5 rounded-md bg-red-600 p-1 px-6 font-semibold text-white hover:bg-red-700"
+                          onClick={handleClickDelete(job.id)}
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              ) : (
+                <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 p-10 pt-8 lg:mx-0 lg:max-w-none lg:grid-cols-3">
+                  {applicationsData?.map((job) => (
+                    <article
+                      key={job.id}
+                      className="flex max-w-xl flex-col items-start justify-between"
+                    >
+                      <div className="flex items-center gap-x-4 rounded-full bg-gray-100 p-1 px-3 text-xs">
+                        {job.jobListing.type}
+                      </div>
+                      <div className="group relative">
+                        <h3 className="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600">
+                          <span className="absolute inset-0" />
+                          {job.jobListing.title}
+                        </h3>
+                        <p className="mt-5 line-clamp-3 text-sm leading-6 text-gray-600">
+                          {job.jobListing.description}
+                        </p>
+                        <p className="mt-5 line-clamp-3 text-sm leading-6 text-gray-600">
+                          {job.reservedAt}
+                        </p>
+                      </div>
+                      <div className="text-sm">
+                        <button
+                          className="mt-5 rounded-md bg-gray-200 p-1 px-6 font-semibold text-black hover:bg-gray-300"
+                          onClick={handleClickEdit(job.id)}
+                        >
+                          Edit
+                        </button>
+                        <button
+                          className="ml-2 mt-5 rounded-md bg-red-600 p-1 px-6 font-semibold text-white hover:bg-red-700"
+                          onClick={handleClickDelete(job.id)}
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         </div>
