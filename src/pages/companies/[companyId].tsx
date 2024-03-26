@@ -3,16 +3,9 @@ import Page from "../layout/page";
 import { api } from "~/utils/api";
 import CompanyDetailSkeleton from "~/components/Card/CompanyDetailCard/CompanyDetailSkeleton";
 import { Dialog, Transition } from "@headlessui/react";
-import { Fragment, useState } from "react";
-import { DayPicker } from "react-day-picker";
-import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
-import {
-  Input,
-  Popover,
-  PopoverHandler,
-  PopoverContent,
-} from "@material-tailwind/react";
-import { format } from "date-fns";
+import { Fragment, type SetStateAction, useState } from "react";
+import { toast } from "sonner";
+import { useSession } from "next-auth/react";
 
 export default function CompanyDetail() {
   const router = useRouter();
@@ -21,10 +14,47 @@ export default function CompanyDetail() {
   const { data, isLoading } = api.company.getCompanyById.useQuery(
     companyId as string,
   );
-  const [date, setDate] = useState<Date>();
+  const [jobId, setJobId] = useState("");
+  const { mutate } = api.application.createApplication.useMutation();
+  const { data: session } = useSession();
 
-  const handleClickInterview = () => {
+  const handleClickInterview = (jobId: SetStateAction<string>) => () => {
+    setJobId(jobId);
     setOpen(true);
+  };
+
+  const handleConfirmInterview = () => {
+    const meetingTimeInput = document.getElementById(
+      "meeting-time",
+    ) as HTMLInputElement | null;
+
+    if (!meetingTimeInput?.value) {
+      toast.error("Please select a date and time for the interview.");
+      return;
+    }
+
+    if (!session?.user?.id) {
+      toast.error("You must be logged in to schedule an interview.");
+      return;
+    }
+    mutate(
+      {
+        userId: session.user.id,
+        jobListingId: jobId,
+        reservedAt: meetingTimeInput.value,
+      },
+      {
+        onSuccess: () => {
+          setOpen(false);
+          toast.success(
+            "Your interview has been successfully scheduled. You can view the details of your interview in the booking tab.",
+          );
+        },
+        onError: () => {
+          toast.error("Failed to schedule the interview. Please try again.");
+        },
+      },
+    );
   };
 
   return (
@@ -120,9 +150,8 @@ export default function CompanyDetail() {
                     </p>
                   </div>
                   <button
-                    className="mt-5 rounded-lg bg-indigo-500 p-1 px-6
-                   font-semibold text-white hover:bg-indigo-600"
-                    onClick={handleClickInterview}
+                    className="mt-5 rounded-lg bg-indigo-500 p-1 px-6 font-semibold text-white hover:bg-indigo-600"
+                    onClick={handleClickInterview(job.id)} // Fixed: Now correctly sets up click handler
                   >
                     Schedule Interview
                   </button>
@@ -182,12 +211,12 @@ export default function CompanyDetail() {
                   </div>
 
                   <div className="mt-5 sm:mt-6">
-                    <a
-                      href="#"
+                    <button
+                      onClick={handleConfirmInterview}
                       className="inline-flex w-full justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                     >
                       Confirm Schedule Interview
-                    </a>
+                    </button>
                   </div>
                 </Dialog.Panel>
               </Transition.Child>
