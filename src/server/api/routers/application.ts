@@ -65,8 +65,13 @@ export const applicationRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       const applications = await ctx.db.application.findMany({
         where: { userId: input },
-        include: {
+        select: {
+          id: true,
+          userId: true, 
+          jobListingId: true,
           jobListing: true,
+          reservedAt: true, 
+
         },
       });
 
@@ -75,5 +80,23 @@ export const applicationRouter = createTRPCRouter({
       }
 
       return applications;
+    }),
+
+  deleteApplication: protectedProcedure
+    .input(
+      z.object({
+        applicationId: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const deletedApplication = await ctx.db.application.delete({
+        where: { id: input.applicationId },
+      });
+
+      if (!deletedApplication) {
+        throw new Error(`Application with ID ${input.applicationId} not found`);
+      }
+
+      return { success: true, message: "Application deleted successfully." };
     }),
 });

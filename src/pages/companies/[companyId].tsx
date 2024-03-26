@@ -22,7 +22,9 @@ export interface JobListing {
 }
 
 export interface Application {
+  id: string;
   jobListing: JobListing;
+  reservedAt: string;
 }
 
 export default function CompanyDetail() {
@@ -32,7 +34,7 @@ export default function CompanyDetail() {
     companyId as string,
   );
   const sessionId = useSession().data?.user.id ?? "NO_OP";
-  const { data: applications, refetch } =
+  const { data: applications } =
     api.application.getApplicationsForUser.useQuery(sessionId);
   const [open, setOpen] = useState(false);
   const [jobId, setJobId] = useState("");
@@ -198,7 +200,7 @@ export default function CompanyDetail() {
                   </div>
                   <button
                     className="mt-5 rounded-lg bg-indigo-500 p-1 px-6 font-semibold text-white hover:bg-indigo-600"
-                    onClick={handleClickInterview(job.id)} // Fixed: Now correctly sets up click handler
+                    onClick={handleClickInterview(job.id)}
                   >
                     Schedule Interview
                   </button>
